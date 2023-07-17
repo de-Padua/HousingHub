@@ -1,24 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Typography from "@mui/joy/Typography";
-import IconButton from "@mui/joy/IconButton";
-import EditIcon from "@mui/icons-material/Edit";
-import CircularProgress from "@mui/joy/CircularProgress";
-import DoneIcon from "@mui/icons-material/Done";
-import AspectRatio from "@mui/joy/AspectRatio";
-import Card from "@mui/joy/Card";
-import CardContent from "@mui/joy/CardContent";
-import Chip from "@mui/joy/Chip";
-import Box from "@mui/joy/Box";
+
 import Button from "@mui/joy/Button";
-import OpenInNew from "@mui/icons-material/OpenInNew";
-import { Link } from "react-router-dom";
+
 import { ContextF } from "../GlobalContext";
-import Item from "./Item";
-import Tooltip from "@mui/joy/Tooltip";
 import Fav from "./Fav.tsx";
 import TabsVariants from "../frags/Tabs.tsx";
 import PostsComponent from "./An.tsx";
-import Ticket from "../Ticket.tsx";
+
 type Inputs = {
   title: string;
   description: string;
