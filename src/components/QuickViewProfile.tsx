@@ -53,7 +53,10 @@ export default function BioCard({ userProfileLink, ownerName }: tProps) {
 
       <CardOverflow sx={{ bgcolor: "background.level1" }}>
         <CardActions buttonFlex="1">
-          <Button color="info" variant="outlined">
+          <Button color="info" variant="outlined" onClick={()=>{
+            
+            window.open( "https://wa.me/+5582981509558")
+          }}>
             Enviar mensagem
           </Button>
         </CardActions>

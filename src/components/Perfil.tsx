@@ -4,6 +4,21 @@ import UserProfile from "./UserProfile";
 import { ContextF } from "../GlobalContext";
 import Avatar from "@mui/joy/Avatar";
 
+type Inputs = {
+  title: string;
+  description: string;
+  images: string[];
+  cep: string;
+  bairro: string;
+  endereço: string;
+  estado: string;
+  tamanho: number;
+  tipo: string;
+  valor: string;
+  desc: string;
+  id: string;
+};
+
 type userT = {
   confirmPassword: string;
   email: string;
@@ -11,7 +26,8 @@ type userT = {
   name: string;
   notifications: string[];
   password: string;
-  posts_id: string[];
+  posts_id: Inputs[];
+  telefone:string
 };
 export default function Perfil() {
   const context = ContextF();
@@ -31,32 +47,29 @@ export default function Perfil() {
           if (data.id === context.userId) {
             setUserProfile(
               <UserProfile
-              
                 name={data.name}
                 isCurrentUser={true}
                 posts_id={data.posts_id}
                 key={"1"}
+                telefone={data.telefone}
               />
             );
           } else {
             setUserProfile(
               <UserProfile
-              key={"2"}
+                key={"2"}
                 name={data.name}
                 isCurrentUser={false}
-                
                 posts_id={data.posts_id}
+                telefone={data.telefone}
+
               />
             );
           }
         });
       }
     }
-
-  }, [context?.userId,url]);
-
- 
-
+  }, [context?.userId, url]);
 
   return (
     <>

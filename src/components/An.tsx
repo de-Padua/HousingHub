@@ -3,8 +3,16 @@ import Ticket from "../Ticket.tsx";
 import CircularProgress from "@mui/joy/CircularProgress";
 
 type props = {
-  posts: object[] | null;
+  posts: item[] | null;
 };
+interface item{
+  images:string[]
+  bairro:string
+  title:string
+  id:string
+  estado:string
+}
+
 export default function PostsComponent ({ posts }: props) {
   return (
     <>
@@ -13,6 +21,7 @@ export default function PostsComponent ({ posts }: props) {
         posts.map((item) => {
           return (
             <Ticket
+              fav={false}
               images={item.images}
               title={item.title}
               adress={item.bairro}

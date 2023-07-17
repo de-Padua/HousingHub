@@ -33,18 +33,7 @@ export default function AlertWithDecorators({ action,handleClose }: Props) {
           endDecorator={
             <React.Fragment>
               
-              <Button
-                size="sm"
-                variant="outlined"
-                color="success"
-                sx={{
-                  textTransform: "uppercase",
-                  fontSize: "xs",
-                  fontWeight: "xl",
-                }}
-              >
-                Ver favoritos
-              </Button>
+      
               <IconButton variant="soft" size="sm" color="success" onClick={handleClose}>
                 <CloseIcon />
               </IconButton>
@@ -61,18 +50,7 @@ export default function AlertWithDecorators({ action,handleClose }: Props) {
           endDecorator={
             <React.Fragment>
               
-              <Button
-                size="sm"
-                variant="outlined"
-                color="danger"
-                sx={{
-                  textTransform: "uppercase",
-                  fontSize: "xs",
-                  fontWeight: "xl",
-                }}
-              >
-                Ver favoritos
-              </Button>
+             
               <IconButton variant="soft" size="sm" color="danger" onClick={handleClose}>
                 <CloseIcon />
               </IconButton>

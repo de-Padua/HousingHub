@@ -16,6 +16,7 @@ type formData = {
   name: string;
   password: string;
   confirmPassword: string;
+  telefone:string
 };
 
 export default function NewAccountForm() {
@@ -41,7 +42,8 @@ export default function NewAccountForm() {
   } = useForm<formData>();
 
   const onSubmit = handleSubmit((data) => {
-   const newData = {...data,id:uuidv4()}
+    const newData = {...data,id:uuidv4(),telefone:data.telefone.replace(/\D/g, '')}
+
 
     if (data.password === data.confirmPassword) {
       context?.createUser(newData)
@@ -51,8 +53,10 @@ export default function NewAccountForm() {
     }
     if (data.confirmPassword != data.password) {
       newAccountErrorPopUp("Senha inválida");
-    }
-  });
+    } 
+   
+
+  }); 
 
   return (
     <>
@@ -97,6 +101,14 @@ export default function NewAccountForm() {
           type="password"
           {...register("confirmPassword", { required: true })}
         />
+         <TextField
+          id="standard-basic"
+          label="Telefone"
+          variant="outlined"
+          type="text"
+          {...register("telefone", { required: true })}
+        />
+        <span>(DDD) XXXXXXXXX</span>
 
         <Button
           variant="contained"

@@ -5,6 +5,7 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  reload,
 } from "firebase/auth";
 import { app, db, storage } from "./Firebase.tsx";
 import Cookies from "universal-cookie";
@@ -66,6 +67,7 @@ type ContextT = {
     id: string,
     fav: { fav_id: string; favTitle: string }
   ) => boolean ;
+  deleteFav:(id:string) => void;
 };
 
 type formData = {
@@ -147,10 +149,14 @@ export const ContextProvider = ({ children }: Props) => {
   const loginUser = (data: UserCredential) => {
     return signInWithEmailAndPassword(auth, data.email, data.password).then(
       () => getUserData(userId!)
+      
     );
   };
   const logout = () => {
-    return signOut(auth);
+    return signOut(auth).then(()=>{
+      location.reload()
+    })
+
   };
 
   const getUserData = async (id: string) => {
@@ -276,8 +282,8 @@ export const ContextProvider = ({ children }: Props) => {
     }
   };
   const updateUserProfile = (id: string) => {
-    const array = userData.posts_id.filter((oldId: string) => {
-      return oldId !== id;
+    const array = userData.posts_id.filter((oldId: Inputs) => {
+      return oldId.id !== id;
     });
 
     if (userData !== null) {
@@ -326,10 +332,33 @@ export const ContextProvider = ({ children }: Props) => {
     
   };
 
+  const deleteFav = (id:string) => {
+    const array = [...userData.favorites]
+    const found = array.find(i =>{
+      return i.fav_id === id
+    })
+    if(found){
+      const newArray = array.filter(i =>{
+        return i.fav_id !== id
+      })
+      const userRef = doc(db, "users", userData.id);
+      updateDoc(userRef, { favorites: newArray, merge: true }).then(() => {
+        getUserData(userData.id);
+        addNewNotification({
+          title: "Anúncio adicionado aos favoritos",
+          desc: "O anúncio foi adicionado aos favoritos ",
+          id: "Novo item em favoritos",
+          tipe: "primary",
+        });
+      });
+
+    }
+  }
   
   return (
     <Context.Provider
       value={{
+        deleteFav,
         addFavToUserDb,
         deletePostFromDB,
         addPostToDBUser,

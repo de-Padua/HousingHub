@@ -139,8 +139,8 @@ export default function Navbar() {
                   overflow: "auto",
                   borderRadius: "sm",
                 }}
-              ></Sheet>
-              {user
+              >
+                {user
                 ? user.notifications.map((not) => {
                     return (
                       <>
@@ -165,6 +165,8 @@ export default function Navbar() {
                     );
                   })
                 : ""}
+              </Sheet>
+              
             </Menu>{" "}
           </>
         ) : (

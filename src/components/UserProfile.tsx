@@ -39,21 +39,27 @@ type tProps = {
   name: string;
   photoURL?: string;
   locale?: string;
-  phone?: string;
   isCurrentUser: boolean;
-  posts_id: string[];
-};
+  posts_id: Inputs[];
+  telefone:string
+}
+
+type Favorites = {
+  fav_id: string;
+  favTitle: string;
+}
 
 export default function UserProfile({
   name,
   photoURL,
   locale,
-  phone,
   isCurrentUser,
   posts_id,
+  telefone
 }: tProps) {
   const [load, setLoad] = useState<boolean | null>(false);
   const [post, setPost] = useState<Inputs[] | null>(null);
+  const [favorites,setFavorites] = useState<Favorites | null>(null)
   const [tabsRender,setTabsRender] = useState<string>("an")
   const context = ContextF();
 
@@ -65,7 +71,9 @@ export default function UserProfile({
     if (context && userIdToGetData) {
       context
         .getUserProfile(userIdToGetData)
-        .then((data) => setPost(data.posts_id));
+        .then((data) => 
+        {setFavorites(data.favorites)
+        setPost(data.posts_id)});
     }
   }, [context?.userData]);
 
@@ -92,7 +100,7 @@ export default function UserProfile({
               <div className="profile-1-1-1">
                 <div className="profile-1-1-1-1">
                   <Typography level="h5">{name}</Typography>
-                  <Typography level="body4">Contato : 82 829380288</Typography>
+                  <Typography level="body4">Contato : {telefone}</Typography>
                 </div>
 
                 {isCurrentUser ? (
@@ -112,7 +120,7 @@ export default function UserProfile({
               <TabsVariants handlePage={handlePage} />
             </div>
             <div className="anu-1-1-scroll">
-             {tabsRender === "an" ? <PostsComponent posts={post}/> : <Fav/>}
+             {tabsRender === "an" ? <PostsComponent posts={post}/> : <Fav favorites={favorites}/>}
 
               {post && post.length === 0 ? (
                 <Typography mb={2} lineHeight="lg" level="body3">
