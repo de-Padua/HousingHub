@@ -15,7 +15,7 @@ import Option from '@mui/joy/Option';
 
 
 
-export  function InputDecorators() {
+export function InputDecorators() {
   const [currency, setCurrency] = React.useState('real');
   return (
     <Input
@@ -79,8 +79,6 @@ export default function Menu({ options,handleFilter }:
          }}>{option}</p>
 
       )}
-      <h3>Por valor máximo</h3>
-      <InputDecorators />
     </div>
   );
 }
