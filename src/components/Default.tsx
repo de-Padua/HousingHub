@@ -9,6 +9,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import LoadCard from ".././frags/LoadCard";
 import Stack from "@mui/material/Stack";
 import AlertWithDecorators from "../frags/Alert";
+import Item from './Item';
 
 type Inputs = {
   title: string;
@@ -34,7 +35,8 @@ type alertT = {
 export default function Default() {
   const [progress, setProgress] = React.useState(0);
   const [load, setLoad] = useState<boolean>(true);
-  const [alert, setAlert] = useState<alertT | null>(null);
+  const [alert, setAlert] = useState<alertT | null>(null)
+  const [filtering,setFiltering] = useState<{isFiltering:boolean ,filter:string }>({isFiltering:true,filter:"Página inicial"})
 
   React.useEffect(() => {
     const timer = setInterval(() => {
@@ -63,21 +65,33 @@ export default function Default() {
   };
 
   const context = ContextF();
-  const menuOptions = ["Página inicial", "Casas", "Apartamentos", "Outros"];
+  const menuOptions = ["Página inicial", "Casa", "Apartamento", "Outros"];
 
   const [posts, setPosts] = useState<Inputs[]>([]);
+  const [unfilteredPosts,setUnfilteredPosts] = useState<Inputs[]>([]);
 
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const selectedOption = (data: number): void => {
-    setSelectedIndex(data);
-  };
+
   const selectedSize = (data: number): void => {
     console.log(data);
   };
+  const handleMenuOptionFiltering = (itemSelected:string):void =>{
+    if(itemSelected === "Página inicial"){
+      setPosts(unfilteredPosts)
+    }
+    else{
+    
+    const filteredPosts:Inputs[] =  unfilteredPosts.filter(x =>{
+      return x.tipo === itemSelected
+    })
+    setPosts(filteredPosts)
+    
+    }
+  }
   useEffect(() => {
     context?.getDocsFromDB().then((data) => {
-      const posts_getted: Inputs[] = data.docs.map((doc) => doc.data());
+      const posts_getted: Inputs[] = data.docs.map((doc:any) => doc.data());
       setPosts(posts_getted);
+      setUnfilteredPosts(posts_getted)
       setLoad(false);
     });
   }, []);
@@ -105,7 +119,7 @@ export default function Default() {
         <div>
           <Menu
             options={menuOptions}
-            handleMenuOptionIndex={selectedOption}
+            handleFilter={handleMenuOptionFiltering}
             handleMenuSizeOptions={selectedSize}
           />
         </div>
@@ -113,7 +127,7 @@ export default function Default() {
           <div>
             <h2 className="option-h4-item-menu">
               {" "}
-              {menuOptions[selectedIndex]}
+              {filtering.filter}
             </h2>
           </div>
           <Grid
@@ -122,7 +136,8 @@ export default function Default() {
             spacing={{ xs: 2, md: 4 }}
             columns={{ xs: 3, sm: 10, md: 12 }}
           >
-            {posts.length > 0 ? (
+          
+          {posts.length ? (
               posts.map((post) => (
                 <Grid>
                   <Card
@@ -138,16 +153,15 @@ export default function Default() {
                   />
                 </Grid>
               ))
-            ) : (
-              <>
+            ) :"" }
+             {load && <>
                 <LoadCard />
                 <LoadCard />
                 <LoadCard />
                 <LoadCard />
                 <LoadCard />
                 <LoadCard />
-              </>
-            )}
+              </>}
           </Grid>
         </div>
       </div>

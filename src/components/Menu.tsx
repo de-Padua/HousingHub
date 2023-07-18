@@ -52,8 +52,8 @@ export  function InputDecorators() {
 
 type Props = {
   options: string[];
-  handleMenuOptionIndex:(data:number)=>void,
   handleMenuSizeOptions:(data:number)=>void
+  handleFilter:(data:string)=>void,
 };
 
 
@@ -62,7 +62,7 @@ type Props = {
 
 
 
-export default function Menu({ options,handleMenuOptionIndex }:
+export default function Menu({ options,handleFilter }:
   
   
   Props) {
@@ -73,8 +73,8 @@ export default function Menu({ options,handleMenuOptionIndex }:
     <div className="menu">
       {options && options.map((option,index) => 
        <p key={index} style={clickedButton === index ? {backgroundColor:"#9772dc",color:"white"} : {backgroundColor:"transparent"}} onClick={()=>{
-          handleMenuOptionIndex(index)
           seClickedButton(index)
+          handleFilter(option)
           
          }}>{option}</p>
 
