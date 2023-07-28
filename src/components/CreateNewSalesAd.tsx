@@ -250,12 +250,21 @@ export default function CreateNewSalesAd() {
         handleOpen();
 
         imagesUpload.map((item) => {
-          return context
+          context
             ?.uploadImages(item, data.id, newData, imagesUpload.length)
             .catch((err) => console.log(err));
         });
       }
     }
+
+
+    
+
+
+
+
+
+
   });
   return (
     <>
