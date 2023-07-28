@@ -72,3 +72,8 @@ Users have a option to delete an ad as soon as they like,deleted ads will not be
 # About
 
 This project is still in development,many missing features will be coming .
+
+
+28/07/2023 UPDATE
+
+1 - > Removed unecessary code
