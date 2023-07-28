@@ -20,6 +20,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
+import { DocumentChange } from "firebase/firestore";
 
 type Inputs = {
   title: string;
@@ -53,6 +54,7 @@ type ContextT = {
     post: Inputs,
     expectedLengh: number
   ) => Promise<unknown>;
+
   getURL: (post_id: string, expectedLength: number, post: Inputs) => void;
   userId: string | null;
   setPostToFalse: () => void;
@@ -66,8 +68,8 @@ type ContextT = {
   addFavToUserDb: (
     id: string,
     fav: { fav_id: string; favTitle: string }
-  ) => boolean ;
-  deleteFav:(id:string) => void;
+  ) => boolean;
+  deleteFav: (id: string) => void;
 };
 
 type formData = {
@@ -149,14 +151,12 @@ export const ContextProvider = ({ children }: Props) => {
   const loginUser = (data: UserCredential) => {
     return signInWithEmailAndPassword(auth, data.email, data.password).then(
       () => getUserData(userId!)
-      
     );
   };
   const logout = () => {
-    return signOut(auth).then(()=>{
-      location.reload()
-    })
-
+    return signOut(auth).then(() => {
+      location.reload();
+    });
   };
 
   const getUserData = async (id: string) => {
@@ -252,7 +252,12 @@ export const ContextProvider = ({ children }: Props) => {
     return getDocs(docs);
   };
   const addUsertoDB = (data: formData) => {
-    const newUserObject: newuser = { ...data, notifications: [], posts_id: [],favorites:[] };
+    const newUserObject: newuser = {
+      ...data,
+      notifications: [],
+      posts_id: [],
+      favorites: [],
+    };
     const userRef = doc(db, "users", data.id);
     return setDoc(userRef, newUserObject).then(() => {
       getUserData(data.id);
@@ -302,45 +307,42 @@ export const ContextProvider = ({ children }: Props) => {
   const addFavToUserDb = (
     id: string,
     fav: { fav_id: string; favTitle: string }
-  ):boolean => {
+  ): boolean => {
     const array = [...userData.favorites];
-    
-    const found = array.find(item =>{
-      return item.fav_id === fav.fav_id
-    })
 
-    if(!found) {
-      const items_fav = [...userData.favorites,fav]
+    const found = array.find((item) => {
+      return item.fav_id === fav.fav_id;
+    });
+
+    if (!found) {
+      const items_fav = [...userData.favorites, fav];
       if (userData !== null) {
-      const userRef = doc(db, "users", userData.id);
-      updateDoc(userRef, { favorites: items_fav, merge: true }).then(() => {
-        getUserData(userData.id);
-        addNewNotification({
-          title: "Anúncio adicionado aos favoritos",
-          desc: "O anúncio foi adicionado aos favoritos ",
-          id: "Novo item em favoritos",
-          tipe: "primary",
+        const userRef = doc(db, "users", userData.id);
+        updateDoc(userRef, { favorites: items_fav, merge: true }).then(() => {
+          getUserData(userData.id);
+          addNewNotification({
+            title: "Anúncio adicionado aos favoritos",
+            desc: "O anúncio foi adicionado aos favoritos ",
+            id: "Novo item em favoritos",
+            tipe: "primary",
+          });
         });
-      });
-      
+      }
+      return true;
+    } else {
+      return false;
     }
-    return true
-    }
-    else{
-    return false
-    }
-    
   };
 
-  const deleteFav = (id:string) => {
-    const array = [...userData.favorites]
-    const found = array.find(i =>{
-      return i.fav_id === id
-    })
-    if(found){
-      const newArray = array.filter(i =>{
-        return i.fav_id !== id
-      })
+  const deleteFav = (id: string) => {
+    const array = [...userData.favorites];
+    const found = array.find((i) => {
+      return i.fav_id === id;
+    });
+    if (found) {
+      const newArray = array.filter((i) => {
+        return i.fav_id !== id;
+      });
       const userRef = doc(db, "users", userData.id);
       updateDoc(userRef, { favorites: newArray, merge: true }).then(() => {
         getUserData(userData.id);
@@ -351,10 +353,9 @@ export const ContextProvider = ({ children }: Props) => {
           tipe: "primary",
         });
       });
-
     }
-  }
-  
+  };
+
   return (
     <Context.Provider
       value={{
